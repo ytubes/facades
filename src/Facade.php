@@ -7,7 +7,7 @@
  * @license   https://github.com/sergeymakinen/yii2-facades/blob/master/LICENSE The MIT License
  */
 
-namespace ytubes\facades;
+namespace yii\support\facades;
 
 use yii\base\Application;
 use yii\base\InvalidConfigException;
