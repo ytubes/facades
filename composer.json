@@ -22,7 +22,7 @@
     },
     "autoload": {
         "psr-4": {
-            "ytubes\\facades\\": "src"
+            "yii\\support\\facades\\": "src"
         }
     }
 }
