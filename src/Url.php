@@ -7,7 +7,7 @@
  * @license   https://github.com/sergeymakinen/yii2-facades/blob/master/LICENSE The MIT License
  */
 
-namespace sergeymakinen\facades;
+namespace ytubes\facades;
 
 /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
 /**
