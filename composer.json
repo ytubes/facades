@@ -1,5 +1,5 @@
 {
-    "name": "sergeymakinen/yii2-facades",
+    "name": "ytubes/facades",
     "homepage": "https://github.com/sergeymakinen/yii2-facades",
     "description": "Laravel like facades support for Yii 2 application components",
     "keywords": ["yii2-facades", "yii2", "yii", "facades", "facade", "laravel"],
@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "sergeymakinen\\facades\\": "src"
+            "ytubes\\facades\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "sergeymakinen\\tests\\facades\\": "tests"
+            "ytubes\\tests\\facades\\": "tests"
         }
     }
 }
