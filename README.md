@@ -35,13 +35,13 @@ The preferred way to install this extension is through [composer](https://getcom
 Either run
 
 ```bash
-composer require "sergeymakinen/yii2-facades:^1.0"
+composer require "ytubes/facades:>=0.0.1"
 ```
 
 or add
 
 ```json
-"sergeymakinen/yii2-facades": "^1.0"
+"ytubes/facades": ">=0.0.1"
 ```
 
 to the require section of your `composer.json` file.
