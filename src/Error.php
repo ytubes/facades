@@ -195,7 +195,7 @@ class Error extends Facade
     /**
      * @inheritDoc
      */
-    public static function getFacadeComponentId()
+    public static function getFacadeAccessor()
     {
         return 'errorHandler';
     }

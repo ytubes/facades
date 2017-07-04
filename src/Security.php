@@ -153,7 +153,7 @@ class Security extends Facade
     /**
      * @inheritDoc
      */
-    public static function getFacadeComponentId()
+    public static function getFacadeAccessor()
     {
         return 'security';
     }

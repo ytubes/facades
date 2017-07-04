@@ -18,25 +18,18 @@ use yii\base\InvalidConfigException;
 abstract class Facade
 {
     /**
-     * Facaded component property accessors.
+     * The application instance being facaded.
+     *
+     * @var \Illuminate\Contracts\Foundation\Application
+     */
+    protected static $app;
+    /**
+     * The resolved object instances.
      *
      * @var array
      */
-    private static $accessors = [];
+    protected static $resolvedInstance;
 
-    /**
-     * The facaded application.
-     *
-     * @var Application
-     */
-    private static $app;
-
-    /**
-     * Facaded components.
-     *
-     * @var object[]
-     */
-    private static $components = [];
 
     /**
      * Prevents the class to be instantiated.
@@ -60,80 +53,63 @@ abstract class Facade
     }
 
     /**
-     * Redirects static calls to component instance calls.
+     * Get the root object behind the facade.
      *
-     * @inheritDoc
+     * @return mixed
      */
-    public static function __callStatic($name, $arguments)
+    public static function getFacadeRoot()
     {
-        $id = static::getFacadeComponentId();
-        if (!isset(self::$accessors[$id])) {
-            self::$accessors[$id] = [];
-            foreach ((new \ReflectionClass(static::getFacadeComponent()))->getProperties(
-                \ReflectionProperty::IS_PUBLIC & ~\ReflectionProperty::IS_STATIC
-            ) as $property) {
-                $accessor = ucfirst($property->getName());
-                self::$accessors[$id]['get' . $accessor] = $property->getName();
-                self::$accessors[$id]['set' . $accessor] = $property->getName();
-            }
-        }
-        if (isset(self::$accessors[$id][$name])) {
-            if ($name[0] === 'g') {
-                return static::getFacadeComponent()->{self::$accessors[$id][$name]};
-            } else {
-                static::getFacadeComponent()->{self::$accessors[$id][$name]} = reset($arguments);
-                return null;
-            }
-        } else {
-            return call_user_func_array([
-                static::getFacadeComponent(),
-                $name,
-            ], $arguments);
-        }
+        return static::resolveFacadeInstance(static::getFacadeAccessor());
     }
 
     /**
-     * Clears a resolved facade component.
-     *
-     * @param string $id
-     */
-    public static function clearResolvedFacadeComponent($id)
-    {
-        unset(self::$accessors[$id], self::$components[$id]);
-    }
-
-    /**
-     * Clears all resolved facade components.
-     */
-    public static function clearResolvedFacadeComponents()
-    {
-        self::$accessors = [];
-        self::$components = [];
-    }
-
-    /**
-     * Returns a component ID being facaded.
+     * Get the registered name of the component.
      *
      * @return string
-     * @throws \yii\base\InvalidConfigException
+     *
+     * @throws \RuntimeException
      */
-    public static function getFacadeComponentId()
+    protected static function getFacadeAccessor()
     {
-        throw new InvalidConfigException('Facade must implement getFacadeComponentId method.');
+        throw new InvalidConfigException('Facade does not implement getFacadeAccessor method.');
     }
 
     /**
-     * Returns a component being facaded.
+     * Resolve the facade root instance from the container.
      *
-     * @return object
+     * @param  string|object  $name
+     * @return mixed
      */
-    public static function getFacadeComponent()
+    protected static function resolveFacadeInstance($name)
     {
-        $id = static::getFacadeComponentId();
-        if (!isset(self::$components[$id])) {
-            self::$components[$id] = static::getFacadeApplication()->get($id);
+        if (is_object($name)) {
+            return $name;
         }
-        return self::$components[$id];
+        if (isset(static::$resolvedInstance[$name])) {
+            return static::$resolvedInstance[$name];
+        }
+
+        return static::$resolvedInstance[$name] = static::getFacadeApplication()->get($name);
+    }
+
+    /**
+     * Clear a resolved facade instance.
+     *
+     * @param  string  $name
+     * @return void
+     */
+    public static function clearResolvedInstance($name)
+    {
+        unset(static::$resolvedInstance[$name]);
+    }
+    /**
+     * Clear all of the resolved instances.
+     *
+     * @return void
+     */
+    public static function clearResolvedInstances()
+    {
+        static::$resolvedInstance = [];
     }
 
     /**
@@ -157,6 +133,20 @@ abstract class Facade
     public static function setFacadeApplication(Application $value)
     {
         self::$app = $value;
-        self::clearResolvedFacadeComponents();
     }
+
+    /**
+     * Redirects static calls to component instance calls.
+     *
+     * @inheritDoc
+     */
+    public static function __callStatic($method, $args)
+    {
+        $instance = static::getFacadeRoot();
+
+        if (! $instance) {
+            throw new InvalidConfigException('A facade root has not been set.');
+        }
+        return $instance->{$method}(...$args);
+	}
 }

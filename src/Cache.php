@@ -117,7 +117,7 @@ class Cache extends Facade
     /**
      * @inheritDoc
      */
-    public static function getFacadeComponentId()
+    public static function getFacadeAccessor()
     {
         return 'cache';
     }
@@ -138,12 +138,12 @@ class Cache extends Facade
      *
      * @return bool whether the value is successfully stored into cache.
      */
-    public static function cache($key, $default, $duration = 0, $dependency = null)
-    {
+    //public static function cache($key, $default, $duration = 0, $dependency = null)
+    //{
         /**
          * @var \yii\caching\Cache $cache
          */
-        $cache = static::getFacadeComponent();
+        /*$cache = static::getFacadeRoot();
         $value = $cache->get($key);
         if ($value === false) {
             if ($default instanceof \Closure) {
@@ -154,7 +154,7 @@ class Cache extends Facade
             $cache->set($key, $value, $duration, $dependency);
         }
         return $value;
-    }
+    }*/
 
     /**
      * Retrieves a value from cache with a specified key.
@@ -167,9 +167,9 @@ class Cache extends Facade
      * @return mixed the value stored in cache or the default value if the value is not in the cache, expired,
      * or the dependency associated with the cached data has changed.
      */
-    public static function get($key, $default = false)
+    /*public static function get($key, $default = false)
     {
-        $value = static::getFacadeComponent()->get($key);
+        $value = static::getFacadeRoot()->get($key);
         if ($value === false) {
             if ($default instanceof \Closure) {
                 $value = call_user_func($default, $key);
@@ -178,5 +178,5 @@ class Cache extends Facade
             }
         }
         return $value;
-    }
+    }*/
 }

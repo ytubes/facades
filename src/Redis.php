@@ -132,7 +132,7 @@ class Redis extends Facade
     /**
      * @inheritDoc
      */
-    public static function getFacadeComponentId()
+    public static function getFacadeAccessor()
     {
         return 'redis';
     }

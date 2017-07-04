@@ -60,7 +60,7 @@ class Url extends Facade
     /**
      * @inheritdoc
      */
-    public static function getFacadeComponentId()
+    public static function getFacadeAccessor()
     {
         return 'urlManager';
     }

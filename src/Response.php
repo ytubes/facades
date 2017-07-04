@@ -213,7 +213,7 @@ class Response extends Facade
     /**
      * @inheritDoc
      */
-    public static function getFacadeComponentId()
+    public static function getFacadeAccessor()
     {
         return 'response';
     }
@@ -316,7 +316,7 @@ class Response extends Facade
         /**
          * @var \yii\web\Response $response
          */
-        $response = static::getFacadeComponent();
+        $response = static::getFacadeRoot();
         $response->format = $format;
         $response->data = $data;
         foreach ($headers as $name => $value) {

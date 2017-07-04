@@ -81,7 +81,7 @@ class I18n extends Facade
     /**
      * @inheritDoc
      */
-    public static function getFacadeComponentId()
+    public static function getFacadeAccessor()
     {
         return 'i18n';
     }
