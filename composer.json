@@ -18,19 +18,11 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "yiisoft/yii2": "~2.0.1"
-    },
-    "require-dev": {
-        "sergeymakinen/yii2-tests": "^1.0"
+        "yiisoft/yii2": "~2.0.9"
     },
     "autoload": {
         "psr-4": {
             "ytubes\\facades\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "ytubes\\tests\\facades\\": "tests"
         }
     }
 }
