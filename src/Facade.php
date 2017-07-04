@@ -22,21 +22,21 @@ abstract class Facade
      *
      * @var array
      */
-    private static $_accessors = [];
+    private static $accessors = [];
 
     /**
      * The facaded application.
      *
      * @var Application
      */
-    private static $_app;
+    private static $app;
 
     /**
      * Facaded components.
      *
      * @var object[]
      */
-    private static $_components = [];
+    private static $components = [];
 
     /**
      * Prevents the class to be instantiated.
@@ -67,21 +67,21 @@ abstract class Facade
     public static function __callStatic($name, $arguments)
     {
         $id = static::getFacadeComponentId();
-        if (!isset(self::$_accessors[$id])) {
-            self::$_accessors[$id] = [];
+        if (!isset(self::$accessors[$id])) {
+            self::$accessors[$id] = [];
             foreach ((new \ReflectionClass(static::getFacadeComponent()))->getProperties(
                 \ReflectionProperty::IS_PUBLIC & ~\ReflectionProperty::IS_STATIC
             ) as $property) {
                 $accessor = ucfirst($property->getName());
-                self::$_accessors[$id]['get' . $accessor] = $property->getName();
-                self::$_accessors[$id]['set' . $accessor] = $property->getName();
+                self::$accessors[$id]['get' . $accessor] = $property->getName();
+                self::$accessors[$id]['set' . $accessor] = $property->getName();
             }
         }
-        if (isset(self::$_accessors[$id][$name])) {
+        if (isset(self::$accessors[$id][$name])) {
             if ($name[0] === 'g') {
-                return static::getFacadeComponent()->{self::$_accessors[$id][$name]};
+                return static::getFacadeComponent()->{self::$accessors[$id][$name]};
             } else {
-                static::getFacadeComponent()->{self::$_accessors[$id][$name]} = reset($arguments);
+                static::getFacadeComponent()->{self::$accessors[$id][$name]} = reset($arguments);
                 return null;
             }
         } else {
@@ -99,7 +99,7 @@ abstract class Facade
      */
     public static function clearResolvedFacadeComponent($id)
     {
-        unset(self::$_accessors[$id], self::$_components[$id]);
+        unset(self::$accessors[$id], self::$components[$id]);
     }
 
     /**
@@ -107,8 +107,8 @@ abstract class Facade
      */
     public static function clearResolvedFacadeComponents()
     {
-        self::$_accessors = [];
-        self::$_components = [];
+        self::$accessors = [];
+        self::$components = [];
     }
 
     /**
@@ -130,10 +130,10 @@ abstract class Facade
     public static function getFacadeComponent()
     {
         $id = static::getFacadeComponentId();
-        if (!isset(self::$_components[$id])) {
-            self::$_components[$id] = static::getFacadeApplication()->get($id);
+        if (!isset(self::$components[$id])) {
+            self::$components[$id] = static::getFacadeApplication()->get($id);
         }
-        return self::$_components[$id];
+        return self::$components[$id];
     }
 
     /**
@@ -143,10 +143,10 @@ abstract class Facade
      */
     public static function getFacadeApplication()
     {
-        if (!isset(self::$_app)) {
-            self::$_app = \Yii::$app;
+        if (!isset(self::$app)) {
+            self::$app = \Yii::$app;
         }
-        return self::$_app;
+        return self::$app;
     }
 
     /**
@@ -156,7 +156,7 @@ abstract class Facade
      */
     public static function setFacadeApplication(Application $value)
     {
-        self::$_app = $value;
+        self::$app = $value;
         self::clearResolvedFacadeComponents();
     }
 }
